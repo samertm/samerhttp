@@ -32,3 +32,9 @@ func (s *Session) Set(id string, val interface{}) {
 	s.session[id] = val
 	s.mut.Unlock()
 }
+
+func (s *Session) Unset(id string) {
+	s.mut.Lock()
+	delete(s.session, id)
+	s.mut.Unlock()
+}
