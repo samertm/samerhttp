@@ -7,7 +7,8 @@ import (
 // Session keeps track of the map between session ids and interface
 
 type Session struct {
-	mut *sync.Mutux
+	mut *sync.Mutex
+	// waiting for generics
 	session map[string]interface{}
 }
 
@@ -19,7 +20,7 @@ func New() *Session {
 }
 
 // Uses value, ok idiom as return values
-func (s *Session) Get(id string) (val interface, ok bool) {
+func (s *Session) Get(id string) (val interface{}, ok bool) {
 	// TODO do I need to lock for reads?
 	s.mut.Lock()
 	val, ok = s.session[id]
