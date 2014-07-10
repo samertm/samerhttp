@@ -4,22 +4,22 @@ import (
 	"sync"
 )
 
-// Session keeps track of the map between session ids and bools
+// Session keeps track of the map between session ids and interface
 
 type Session struct {
 	mut *sync.Mutux
-	session map[string]bool
+	session map[string]interface{}
 }
 
 func New() *Session {
 	return &Session{
 		mut: &sync.Mutex{},
-		session: make(map[string]bool),
+		session: make(map[string]interface{}),
 	}
 }
 
 // Uses value, ok idiom as return values
-func (s *Session) Get(id string) (val bool, ok bool) {
+func (s *Session) Get(id string) (val interface, ok bool) {
 	// TODO do I need to lock for reads?
 	s.mut.Lock()
 	val, ok = s.session[id]
@@ -27,7 +27,7 @@ func (s *Session) Get(id string) (val bool, ok bool) {
 	return
 }
 
-func (s *Session) Set(id string, val bool) {
+func (s *Session) Set(id string, val interface{}) {
 	s.mut.Lock()
 	s.session[id] = val
 	s.mut.Unlock()
