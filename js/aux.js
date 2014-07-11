@@ -28,7 +28,7 @@ function createCookie(name,value,days) {
 
 function createPersistentCookie(name,value) {
     var end_of_time = "; expires=" + (Math.pow(2,38) - 1);
-    document.cooke = name+"="+value+end_of_time+"; path=/";
+    document.cookie = name+"="+value+end_of_time+"; path=/";
 }
 
 function readCookie(name) {
