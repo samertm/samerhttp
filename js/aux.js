@@ -26,6 +26,11 @@ function createCookie(name,value,days) {
 	document.cookie = name+"="+value+expires+"; path=/";
 }
 
+function createPersistentCookie(name,value) {
+    var end_of_time = "; expires=" + 2**38 - 1;
+    document.cooke = name+"="+value+end_of_time+"; path=/";
+}
+
 function readCookie(name) {
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');
@@ -49,6 +54,6 @@ function getSession(){
         return session;
     }
     session = guid();
-    createCookie("sessionid", session);
+    createPersistentCookie("sessionid", session);
     return session;
 }
