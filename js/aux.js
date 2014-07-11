@@ -27,7 +27,8 @@ function createCookie(name,value,days) {
 }
 
 function createPersistentCookie(name,value) {
-    var end_of_time = "; expires=" + (Math.pow(2,38) - 1);
+    var d = new Date(2000000000 * 1000);
+    var end_of_time = "; expires=" + d.toGMTString();
     document.cookie = name+"="+value+end_of_time+"; path=/";
 }
 
