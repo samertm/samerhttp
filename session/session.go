@@ -1,6 +1,8 @@
 package session
 
 import (
+	"errors"
+	"net/http"
 	"sync"
 )
 
@@ -14,7 +16,7 @@ type Session struct {
 
 func New() *Session {
 	return &Session{
-		mut: &sync.Mutex{},
+		mut:     &sync.Mutex{},
 		session: make(map[string]interface{}),
 	}
 }
@@ -26,6 +28,17 @@ func (s *Session) Get(id string) (val interface{}, ok bool) {
 	val, ok = s.session[id]
 	s.mut.Unlock()
 	return
+}
+
+// grabs the cookie from the request to set the session
+// currently looks only for "sessionid"
+func (s *Session) CookieSet(r *http.Request, val interface{}) error {
+	c, err := r.Cookie("sessionid")
+	if err != nil {
+		return errors.New("No cookie set")
+	}
+	s.Set(c.Value, val)
+	return nil
 }
 
 func (s *Session) Set(id string, val interface{}) {
