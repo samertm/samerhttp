@@ -28,16 +28,28 @@ func New() *Session {
 }
 
 // Uses value, ok idiom as return values
-func (s *Session) Get(id string) (val interface{}, ok bool) {
+func (s *Session) Get(id string) (interface{}, bool) {
 	// TODO do I need to lock for reads?
 	s.mut.Lock()
-	val, ok = s.session[id]
+	val, ok := s.session[id]
 	s.mut.Unlock()
-	return
+	return val, ok
+}
+
+// Uses value, ok idiom as return values
+// looks for cookie in CookieName
+// returns 'false' if the cookie has not been set or if the value does not exist
+func (s *Session) CookieGet(r *http.Request) (interface{}, bool) {
+	c, err := r.Cookie(s.CookieName)
+	if err != nil {
+		return nil, false
+	}
+	v, ok := s.Get(c.Value)
+	return v, ok
 }
 
 // grabs the cookie from the request to set the session
-// currently looks only for "sessionid"
+// looks for cookie in CookieName
 func (s *Session) CookieSet(r *http.Request, val interface{}) error {
 	c, err := r.Cookie(s.CookieName)
 	if err != nil {
